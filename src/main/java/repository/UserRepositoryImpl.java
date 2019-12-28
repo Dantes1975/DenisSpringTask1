@@ -1,6 +1,9 @@
 package repository;
 
 import bean.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -9,12 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Data
 @Repository
 public class UserRepositoryImpl extends AbstractRepository<User> implements UserRepository {
     private static Map<Long, User> USERS = new HashMap<Long, User>();
     private static AtomicLong ID = new AtomicLong(1);
-
-
 
 
     @Autowired
@@ -25,28 +27,4 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
         }
     }
 
-    @Override
-    public User save(User user) {
-        return super.save(user);
-    }
-
-    @Override
-    public void remove(long id) {
-        super.remove(id);
-    }
-
-    @Override
-    public User getById(long id) {
-        return super.getById(id);
-    }
-
-    @Override
-    public User getByName(String name) {
-        return super.getByName(name);
-    }
-
-    @Override
-    public List<User> getAll() {
-        return super.getAll();
-    }
 }
