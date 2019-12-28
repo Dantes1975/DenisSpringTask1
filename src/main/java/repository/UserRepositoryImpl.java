@@ -1,9 +1,7 @@
 package repository;
 
 import bean.User;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,6 +21,7 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
     private void initDefaultUsers(List<User> users) {
         for (User user : users) {
             long id = ID.getAndIncrement();
+            user.setId(id);
             USERS.put(id, user);
         }
     }
