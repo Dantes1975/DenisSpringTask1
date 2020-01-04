@@ -4,20 +4,27 @@ import bean.Auditorium;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import repository.AuditoriumRepositoryImpl;
+
 
 import java.util.List;
 
 @Data
 @Service
-public class AuditoriumServiceImpl implements AuditoriumService {
-    @Override
+@NoArgsConstructor
+@AllArgsConstructor
+public class AuditoriumServiceImpl {
+    @Autowired
+    AuditoriumRepositoryImpl auditoriumRepository;
+
+
     public Auditorium getByName(String name) {
-        return null;
+        return auditoriumRepository.getByName(name);
     }
 
-    @Override
     public List<Auditorium> getAll() {
-        return null;
+        return auditoriumRepository.getAll();
     }
 }

@@ -3,6 +3,7 @@ package bean;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Data
 @AllArgsConstructor
@@ -11,5 +12,13 @@ public class Auditorium {
     private long id;
     private String name;
     private int numberOfSeats;
-    private int vipSeats;
+    private int[] vipSeats;
+
+    public Auditorium(String name, int numberOfSeats, int[] vipSeats) {
+        this.name = name;
+        this.numberOfSeats = numberOfSeats;
+        this.vipSeats = vipSeats;
+    }
+
+
 }

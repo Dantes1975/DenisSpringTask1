@@ -1,11 +1,16 @@
-package repository;
+package repository.dao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractRepository<T> implements CrudRepository<T> {
 
+List<T> list;
+
     public T save(T t) {
-        return null;
+        list.add(t);
+        return t;
     }
 
     public void remove(long id) {
@@ -21,6 +26,11 @@ public abstract class AbstractRepository<T> implements CrudRepository<T> {
     }
 
     public List<T> getAll() {
-        return null;
+        List<T> list = new ArrayList<>();
+        return list;
     }
+
+    public abstract Map<Long, T>getStorage();
+
+
 }

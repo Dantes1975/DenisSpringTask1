@@ -1,37 +1,52 @@
 package service;
 
 import bean.Event;
+import bean.EventAuditory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import repository.EventAuditRepositoryImpl;
+import repository.EventRepositoryImpl;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Service
-public class EventServiceImpl implements EventService {
-    @Override
-    public Event save(Event event) {
-        return null;
+public class EventServiceImpl {
+    @Autowired
+    EventRepositoryImpl eventRepository;
+
+        public Event save(Event event) {
+        eventRepository.save(event);
+        return event;
     }
 
-    @Override
+
     public void remove(long id) {
-
+        eventRepository.remove(id);
     }
 
-    @Override
+
     public Event getById(long id) {
-        return null;
+        return eventRepository.getById(id);
     }
 
-    @Override
+
     public Event getByName(String name) {
-        return null;
+        return eventRepository.getByName(name);
     }
 
-    @Override
+
     public List<Event> getAll() {
-        return null;
+        return eventRepository.getAll();
     }
+
+
 }
