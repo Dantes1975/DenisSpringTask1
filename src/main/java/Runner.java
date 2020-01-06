@@ -8,6 +8,7 @@ import service.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
 
 public class Runner {
     private static final ApplicationContext APPLICATION_CONTEXT = new AnnotationConfigApplicationContext(AuditoriumConfig.class,
@@ -15,53 +16,140 @@ public class Runner {
 
     public static void main(String[] args) {
 
-        UserServiceImpl userService = (UserServiceImpl) APPLICATION_CONTEXT.getBean("userService");
-        AuditoriumServiceImpl auditoriumService = (AuditoriumServiceImpl) APPLICATION_CONTEXT.getBean("auditoriumService");
-        EventServiceImpl eventService = (EventServiceImpl) APPLICATION_CONTEXT.getBean("eventService");
+        UserService userService = (UserService) APPLICATION_CONTEXT.getBean("userService");
+        AuditoriumService auditoriumService = (AuditoriumService) APPLICATION_CONTEXT.getBean("auditoriumService");
+        EventService eventService = (EventService) APPLICATION_CONTEXT.getBean("eventService");
         EventAuditService eventAuditService = (EventAuditService) APPLICATION_CONTEXT.getBean("eventAuditService");
         EventAuditory eventAuditory = (EventAuditory) APPLICATION_CONTEXT.getBean("eventAuditory");
-        BookingServiceImpl bookingService = (BookingServiceImpl) APPLICATION_CONTEXT.getBean("bookingService");
+        BookingService bookingService = (BookingService) APPLICATION_CONTEXT.getBean("bookingService");
         TicketService ticketService = (TicketService) APPLICATION_CONTEXT.getBean("ticketService");
+        DiscountService discountService = (DiscountService) APPLICATION_CONTEXT.getBean("discountService");
 
-        System.out.println("From list Users");
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter your name");
+        String name = in.nextLine();
+        System.out.println("Enter your surname");
+        String surname = in.nextLine();
+        System.out.println("Enter year ot your birthday");
+        int year = in.nextInt();
+        System.out.println("Enter month ot your birthday");
+        int month = in.nextInt();
+        System.out.println("Enter day ot your birthday");
+        int day = in.nextInt();
+        in.nextLine();
+        System.out.println("Enter your email");
+        String email = in.nextLine();
+
+        User user = (User) APPLICATION_CONTEXT.getBean("user");
+        user.setName(name);
+        user.setSurname(surname);
+        user.setBirthday(LocalDate.of(year, month, day));
+        user.setEmail(email);
+        userService.save(user);
+
+        System.out.println("Users");
         List<User> users = userService.getAll();
         for (User us : users) {
             System.out.println(us.toString());
         }
 
+
+        System.out.println("Input email");
+        String yourEmail = in.nextLine();
+        User user1 = userService.getByEmail(yourEmail);
+        System.out.println("User by email");
+        System.out.println(user1.toString());
+
         System.out.println("Events");
-        List<Event> users1 = eventService.getAll();
-        for (Event us : users1) {
-            System.out.println(us.toString());
+        List<Event> events = eventService.getAll();
+        for (Event event : events) {
+            System.out.println(event.getName());
         }
 
+        System.out.println("Auditoriums");
         List<Auditorium> auditoriums = auditoriumService.getAll();
         for (Auditorium aud : auditoriums) {
             System.out.println(aud.getName());
         }
 
-        User user = userService.getById(1);
-        Event event = eventService.getById(3);
+        Event event = eventService.getById(1);
         Auditorium auditorium = auditoriumService.getByName("red");
         eventAuditory.setEvent(event);
         eventAuditory.setAuditorium(auditorium);
-        eventAuditory.setDateTime(LocalDate.of(2019, 12, 31));
+        eventAuditory.setDateTime(LocalDate.of(2019, 8, 20));
         eventAuditService.save(eventAuditory);
 
-        double price = bookingService.getTicketPrice(event, LocalDate.of(2019, 12, 31), user, 12);
-        double price1 = bookingService.getTicketPrice(event, LocalDate.of(2019, 12, 31), user, 9);
-        System.out.println(price);
-        System.out.println(price1);
+        System.out.println("You can see events from-to dates");
+        System.out.println("Enter year ot from-date");
+        int yearFrom = in.nextInt();
+        System.out.println("Enter month ot from-date");
+        int monthFrom = in.nextInt();
+        System.out.println("Enter day ot from-date");
+        int dayFrom = in.nextInt();
+        LocalDate fromDate = LocalDate.of(yearFrom, monthFrom, dayFrom);
+        System.out.println("Enter year ot to-date");
+        int yearTo = in.nextInt();
+        System.out.println("Enter month ot to-date");
+        int monthTo = in.nextInt();
+        System.out.println("Enter day ot to-date");
+        int dayTo = in.nextInt();
+        LocalDate toDate = LocalDate.of(yearTo, monthTo, dayTo);
+
+        List<EventAuditory> eventAuditories = eventAuditService.getForDateRange(fromDate, toDate);
+        for (EventAuditory event1 : eventAuditories) {
+            System.out.println(event1.getEvent().getName() + " " + event1.getDateTime() +
+                    " Auditorium " + event1.getAuditorium().getName() + " Base price " +
+                    event1.getEvent().getBasePriseOfTicket());
+        }
+
+
+        in.nextLine();
+
+        System.out.println("Input name of event");
+        String eventName = in.nextLine();
+        System.out.println("Input date of event");
+        System.out.println("Enter year ot to-date");
+        int eventEyear = in.nextInt();
+        System.out.println("Enter month ot to-date");
+        int eventMonth = in.nextInt();
+        System.out.println("Enter day ot to-date");
+        int eventDay = in.nextInt();
+        LocalDate eventDate = LocalDate.of(eventEyear, eventMonth, eventDay);
+
+        EventAuditory eventAuditory1 = eventAuditService.getEventAuditoryByEventNameDate(eventName, eventDate);
+        System.out.println("Your choice");
+        System.out.println(eventAuditory1.getEvent().getName());
+        System.out.println(eventAuditory1.getDateTime());
+        System.out.println(eventAuditory1.getAuditorium().getName());
+        System.out.println("Base price " + eventAuditory1.getEvent().getBasePriseOfTicket());
+
+        System.out.println("Input number of seat");
+        int seat = in.nextInt();
+        double price = bookingService.getTicketPrice(eventAuditory1, user, seat);
+        System.out.println("Base price of ticket");
+        System.out.println(eventAuditory1.getEvent().getBasePriseOfTicket());
+        System.out.println("Your discount");
+        System.out.println(discountService.getDiscount(user, eventAuditory1));
+        System.out.println("Price of your ticket = " + price);
 
         Ticket ticket = (Ticket) APPLICATION_CONTEXT.getBean("ticket");
-        ticket.setEventAuditory(eventAuditory);
+        ticket.setEventAuditory(eventAuditory1);
         ticket.setUser(user);
-        ticket.setSeat(12);
+        ticket.setSeat(seat);
         ticket.setPrice(price);
         ticketService.save(ticket);
+
+        System.out.println("YOUR TICKET");
         List<Ticket> tickets = ticketService.getTicketsByUser(user);
-        for (Ticket tic:tickets) {
-            System.out.println(tic.toString());
+        for (Ticket tic : tickets) {
+            System.out.println("Name: " + tic.getUser().getName());
+            System.out.println("Surname: " + tic.getUser().getSurname());
+            System.out.println("Auditorium: " + tic.getEventAuditory().getAuditorium().getName());
+            System.out.println("Seat: " + tic.getSeat());
+            System.out.println("Date: " + tic.getEventAuditory().getDateTime());
+            System.out.println("Total price: " + tic.getPrice());
         }
+
+
     }
 }

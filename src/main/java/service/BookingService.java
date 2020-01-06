@@ -8,12 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.BookingRepositoryImpl;
-import repository.EventAuditRepositoryImpl;
-import repository.EventRepositoryImpl;
-import repository.UserRepositoryImpl;
 
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -21,13 +16,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Service
-public class BookingServiceImpl {
+public class BookingService {
     @Autowired
     BookingRepositoryImpl bookingRepository;
 
     @Autowired
     EventAuditService eventAuditService;
-
+    @Autowired
+    DiscountService discountService;
 
     public Booking save(Booking booking) {
         bookingRepository.save(booking);
@@ -48,15 +44,24 @@ public class BookingServiceImpl {
     }
 
 
-    public double getTicketPrice(Event event, LocalDate dateTime, User user, int seat) {
-        Double price = event.getBasePriseOfTicket();
+    public double getTicketPrice(EventAuditory event, User user, int seat) {
+        Double price = event.getEvent().getBasePriseOfTicket();
         Double sumPrice = 0.0;
-        Auditorium auditorium = eventAuditService.getAuditoryByEventDate(event, dateTime);
-        sumPrice = price * (getRatingPriceCoefficient(event) + getSeatPriceCoefficient(auditorium, seat));
+        Auditorium auditorium = event.getAuditorium();
+        sumPrice = price * (getRatingPriceCoefficient(event.getEvent()) + getSeatPriceCoefficient(auditorium, seat) -
+                discountService.getDiscount(user, event));
         return sumPrice;
     }
 
-
+    public double getTicketsPrice(EventAuditory event, User user, int[] seats) {
+        Double price = event.getEvent().getBasePriseOfTicket();
+        Double sumPrice = 0.0;
+        Auditorium auditorium = event.getAuditorium();
+        for (int i = 0; i < seats.length; i++) {
+            sumPrice += price * (getRatingPriceCoefficient(event.getEvent()) + getSeatPriceCoefficient(auditorium, seats[i]));
+        }
+        return sumPrice;
+    }
 
     private double getSeatPriceCoefficient(Auditorium auditorium, int seat) {
         int[] vipSeatsList = auditorium.getVipSeats();
@@ -67,6 +72,7 @@ public class BookingServiceImpl {
         }
         return 1.0;
     }
+
 
     private double getRatingPriceCoefficient(Event event) {
         if (event.getRating().equals("high")) {
@@ -79,6 +85,7 @@ public class BookingServiceImpl {
     }
 
     public void bookTicket(Ticket ticket) {
-
+        List<Ticket> tickets = ticket.getUser().getTickets();
+        tickets.add(ticket);
     }
 }

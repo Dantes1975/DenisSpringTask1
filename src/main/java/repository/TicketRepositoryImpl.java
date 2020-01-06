@@ -1,10 +1,12 @@
 package repository;
 
+import bean.Event;
 import bean.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import repository.dao.CrudRepository;
 import repository.dao.TicketRepository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,5 +54,17 @@ public class TicketRepositoryImpl implements CrudRepository<Ticket>, TicketRepos
             ticket.setId(id);
             TICKETS.put(id, ticket);
         }
+    }
+
+    public List<Ticket> getPurchasedTicketsForEvent(Event event, LocalDate date) {
+        List<Ticket> tickets = new ArrayList<>(TICKETS.values());
+        for (Ticket ticket : tickets) {
+            if (ticket.getEventAuditory().getEvent().equals(event) && ticket.getEventAuditory().getDateTime().equals(date)) {
+                continue;
+            } else {
+                tickets.remove(ticket);
+            }
+        }
+        return tickets;
     }
 }

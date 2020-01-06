@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import repository.AuditoriumRepositoryImpl;
-import service.AuditoriumServiceImpl;
+import service.AuditoriumService;
 
 import static util.StringToArrayUtils.getVipSeats;
 
@@ -15,8 +15,8 @@ import static util.StringToArrayUtils.getVipSeats;
 @PropertySource("classpath:auditorium.properties")
 public class AuditoriumConfig {
     @Bean
-    AuditoriumServiceImpl auditoriumService() {
-        return new AuditoriumServiceImpl(auditoriumRepository());
+    AuditoriumService auditoriumService() {
+        return new AuditoriumService(auditoriumRepository());
     }
 
     @Bean

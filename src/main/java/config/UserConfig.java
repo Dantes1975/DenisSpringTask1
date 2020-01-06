@@ -4,15 +4,15 @@ import bean.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import repository.UserRepositoryImpl;
-import service.UserServiceImpl;
+import service.UserService;
 
 import java.time.LocalDate;
 
 @Configuration
 public class UserConfig {
     @Bean
-    UserServiceImpl userService() {
-        return new UserServiceImpl(userRepository());
+    UserService userService() {
+        return new UserService(userRepository());
     }
 
     @Bean
@@ -36,5 +36,9 @@ public class UserConfig {
     public User user3() {
         return new User("Viktoriya", "Rumyanceva",
                 LocalDate.of(1999, 11, 25), "vika@mail.ru");
+    }
+    @Bean
+    public User user(){
+        return new User();
     }
 }

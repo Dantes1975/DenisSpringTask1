@@ -44,10 +44,14 @@ public class UserRepositoryImpl implements CrudRepository<User>, UserRepository 
 
 
     public User getUserByEmail(String email) {
-        return USERS.values().stream()
-                .filter(u -> u.getEmail().equals(email))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException(INVALID_USER__EMAIL));
+        List<User> users = new ArrayList<>(USERS.values());
+        User user = null;
+        for (User us: users) {
+            if(us.getEmail().equals(email)){
+                user=us;
+            } else continue;
+        }
+        return user;
 
     }
 

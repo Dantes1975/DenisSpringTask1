@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuditoriumServiceImpl {
+public class AuditoriumService {
     @Autowired
     AuditoriumRepositoryImpl auditoriumRepository;
 

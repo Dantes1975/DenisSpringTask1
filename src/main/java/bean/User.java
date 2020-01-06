@@ -3,9 +3,10 @@ package bean;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -17,6 +18,7 @@ public class User {
     private String surname;
     private LocalDate birthday;
     private String email;
+    private List<Ticket> tickets = new ArrayList<>();
 
     public User(String name, String surname, LocalDate birthday, String email) {
         this.name = name;
@@ -29,5 +31,16 @@ public class User {
         this.name = name;
         this.surname = surname;
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", birthday=" + birthday +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

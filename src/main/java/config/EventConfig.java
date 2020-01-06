@@ -10,17 +10,17 @@ import repository.BookingRepositoryImpl;
 import repository.EventAuditRepositoryImpl;
 import repository.EventRepositoryImpl;
 import repository.TicketRepositoryImpl;
-import service.BookingServiceImpl;
-import service.EventAuditService;
-import service.EventServiceImpl;
-import service.TicketService;
+import service.*;
+import strategy.BirthdayStrategy;
+import strategy.DiscountStrategy;
+import strategy.EveryTenthTicket;
 
 @Configuration
 public class EventConfig {
 
     @Bean
-    public BookingServiceImpl bookingService() {
-        return new BookingServiceImpl(bookingRepository(), eventAuditService());
+    public BookingService bookingService() {
+        return new BookingService(bookingRepository(), eventAuditService(), discountService());
     }
 
     @Bean
@@ -34,8 +34,8 @@ public class EventConfig {
     }
 
     @Bean
-    public EventServiceImpl eventService() {
-        return new EventServiceImpl(eventRepository());
+    public EventService eventService() {
+        return new EventService(eventRepository());
     }
 
     @Bean
@@ -89,4 +89,20 @@ public class EventConfig {
     public Ticket ticket(){
         return new Ticket();
     }
+
+    @Bean
+    public DiscountService discountService(){
+        return new DiscountService();
+    }
+
+    @Bean
+    public DiscountStrategy discountStrategy1(){
+        return new BirthdayStrategy();
+    }
+
+    @Bean
+    public DiscountStrategy discountStrategy2(){
+        return new EveryTenthTicket();
+    }
+
 }
