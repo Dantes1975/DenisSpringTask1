@@ -6,7 +6,6 @@ import bean.EventAuditory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import repository.EventAuditRepositoryImpl;
 
 import java.time.LocalDate;
@@ -17,8 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventAuditService {
-    @Autowired
-    EventAuditRepositoryImpl eventAuditRepository;
+
+    private EventAuditRepositoryImpl eventAuditRepository;
 
     public EventAuditory save(EventAuditory eventAuditory) {
         eventAuditRepository.save(eventAuditory);
