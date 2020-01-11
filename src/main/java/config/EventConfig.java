@@ -6,6 +6,7 @@ import bean.EventAuditory;
 import bean.Ticket;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import repository.BookingRepositoryImpl;
 import repository.EventAuditRepositoryImpl;
 import repository.EventRepositoryImpl;
@@ -16,6 +17,7 @@ import strategy.DiscountStrategy;
 import strategy.EveryTenthTicket;
 
 @Configuration
+@Import({AuditoriumConfig.class, UserConfig.class})
 public class EventConfig {
 
     @Bean

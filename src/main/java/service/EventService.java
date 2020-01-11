@@ -4,7 +4,6 @@ import bean.Event;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.EventRepositoryImpl;
 
@@ -15,8 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @Service
 public class EventService {
-    @Autowired
-    EventRepositoryImpl eventRepository;
+
+    private EventRepositoryImpl eventRepository;
 
     public Event save(Event event) {
         eventRepository.save(event);

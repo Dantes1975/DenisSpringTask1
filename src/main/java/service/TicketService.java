@@ -6,7 +6,6 @@ import bean.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import repository.TicketRepositoryImpl;
 
 import java.time.LocalDate;
@@ -17,7 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 public class TicketService {
 
-    @Autowired
     private TicketRepositoryImpl ticketRepository;
 
     public Ticket save(Ticket ticket) {

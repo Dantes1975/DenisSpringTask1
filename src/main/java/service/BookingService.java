@@ -17,13 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 @Service
 public class BookingService {
-    @Autowired
-    BookingRepositoryImpl bookingRepository;
 
-    @Autowired
-    EventAuditService eventAuditService;
-    @Autowired
-    DiscountService discountService;
+    private BookingRepositoryImpl bookingRepository;
+    private EventAuditService eventAuditService;
+    private DiscountService discountService;
 
     public Booking save(Booking booking) {
         bookingRepository.save(booking);

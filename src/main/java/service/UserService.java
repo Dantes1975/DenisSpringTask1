@@ -4,7 +4,6 @@ import bean.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.UserRepositoryImpl;
 
@@ -15,9 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserService {
-    @Autowired
-    private UserRepositoryImpl userRepository;
 
+    private UserRepositoryImpl userRepository;
 
 
     public User save(User user) {
@@ -35,7 +33,7 @@ public class UserService {
         return userRepository.getById(id);
     }
 
-        public User getByEmail(String email) {
+    public User getByEmail(String email) {
         return userRepository.getUserByEmail(email);
     }
 
