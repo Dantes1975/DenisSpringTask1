@@ -15,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Service
 public class EventService {
-    @Autowired
-    EventRepositoryImpl eventRepository;
+
+   private EventRepositoryImpl eventRepository;
 
     public Event save(Event event) {
         eventRepository.save(event);

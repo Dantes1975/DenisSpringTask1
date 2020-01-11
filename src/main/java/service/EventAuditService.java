@@ -17,8 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventAuditService {
-    @Autowired
-    EventAuditRepositoryImpl eventAuditRepository;
+
+    private EventAuditRepositoryImpl eventAuditRepository;
 
     public EventAuditory save(EventAuditory eventAuditory) {
         eventAuditRepository.save(eventAuditory);

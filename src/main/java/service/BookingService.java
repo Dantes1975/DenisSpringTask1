@@ -5,7 +5,6 @@ import bean.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.BookingRepositoryImpl;
 
@@ -17,13 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @Service
 public class BookingService {
-    @Autowired
-    BookingRepositoryImpl bookingRepository;
 
-    @Autowired
-    EventAuditService eventAuditService;
-    @Autowired
-    DiscountService discountService;
+    private BookingRepositoryImpl bookingRepository;
+    private EventAuditService eventAuditService;
+    private DiscountService discountService;
 
     public Booking save(Booking booking) {
         bookingRepository.save(booking);

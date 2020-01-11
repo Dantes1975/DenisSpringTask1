@@ -1,8 +1,6 @@
 package repository;
 
-import bean.Event;
 import bean.EventAuditory;
-import org.springframework.beans.factory.annotation.Autowired;
 import repository.dao.CrudRepository;
 import repository.dao.EventAuditRepository;
 
@@ -16,8 +14,6 @@ public class EventAuditRepositoryImpl implements CrudRepository<EventAuditory>, 
     private static Map<Long, EventAuditory> EVENTAUDITORIUMS = new HashMap<Long, EventAuditory>();
     private static AtomicLong ID = new AtomicLong(1);
 
-    @Autowired
-    private List<EventAuditory> eventAuditories;
 
     @Override
     public EventAuditory save(EventAuditory eventAuditory) {

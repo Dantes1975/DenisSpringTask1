@@ -37,8 +37,5 @@ public class UserConfig {
         return new User("Viktoriya", "Rumyanceva",
                 LocalDate.of(1999, 11, 25), "vika@mail.ru");
     }
-    @Bean
-    public User user(){
-        return new User();
-    }
+
 }

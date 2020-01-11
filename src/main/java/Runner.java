@@ -1,9 +1,11 @@
 import bean.*;
+import config.AspectConfig;
 import config.AuditoriumConfig;
 import config.EventConfig;
 import config.UserConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import service.*;
 
 import java.time.LocalDate;
@@ -11,19 +13,19 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Runner {
-    private static final ApplicationContext APPLICATION_CONTEXT = new AnnotationConfigApplicationContext(AuditoriumConfig.class,
-            UserConfig.class, EventConfig.class);
+    private static final ApplicationContext APPLICATION_CONTEXT = new AnnotationConfigApplicationContext(EventConfig.class);
 
     public static void main(String[] args) {
 
-        UserService userService = (UserService) APPLICATION_CONTEXT.getBean("userService");
-        AuditoriumService auditoriumService = (AuditoriumService) APPLICATION_CONTEXT.getBean("auditoriumService");
-        EventService eventService = (EventService) APPLICATION_CONTEXT.getBean("eventService");
-        EventAuditService eventAuditService = (EventAuditService) APPLICATION_CONTEXT.getBean("eventAuditService");
-        EventAuditory eventAuditory = (EventAuditory) APPLICATION_CONTEXT.getBean("eventAuditory");
-        BookingService bookingService = (BookingService) APPLICATION_CONTEXT.getBean("bookingService");
-        TicketService ticketService = (TicketService) APPLICATION_CONTEXT.getBean("ticketService");
-        DiscountService discountService = (DiscountService) APPLICATION_CONTEXT.getBean("discountService");
+        UserService userService = APPLICATION_CONTEXT.getBean("userService", UserService.class);
+        AuditoriumService auditoriumService = APPLICATION_CONTEXT.getBean("auditoriumService", AuditoriumService.class);
+        EventService eventService = APPLICATION_CONTEXT.getBean("eventService", EventService.class);
+        EventAuditService eventAuditService = APPLICATION_CONTEXT.getBean("eventAuditService", EventAuditService.class);
+        EventAuditory eventAuditory = APPLICATION_CONTEXT.getBean("eventAuditory", EventAuditory.class);
+        BookingService bookingService = APPLICATION_CONTEXT.getBean("bookingService", BookingService.class);
+        TicketService ticketService = APPLICATION_CONTEXT.getBean("ticketService", TicketService.class);
+        DiscountService discountService = APPLICATION_CONTEXT.getBean("discountService", DiscountService.class);
+        //LocalContainerEntityManagerFactoryBean emf = APPLICATION_CONTEXT.getBean("entityManagerFactory", LocalContainerEntityManagerFactoryBean.class);
 
         Scanner in = new Scanner(System.in);
         System.out.println("Enter your name");
@@ -40,7 +42,7 @@ public class Runner {
         System.out.println("Enter your email");
         String email = in.nextLine();
 
-        User user = (User) APPLICATION_CONTEXT.getBean("user");
+        User user = new User();
         user.setName(name);
         user.setSurname(surname);
         user.setBirthday(LocalDate.of(year, month, day));
@@ -72,9 +74,9 @@ public class Runner {
             System.out.println(aud.getName());
         }
 
-        Event event = eventService.getById(1);
+        Event predator = eventService.getById(1);
         Auditorium auditorium = auditoriumService.getByName("red");
-        eventAuditory.setEvent(event);
+        eventAuditory.setEvent(predator);
         eventAuditory.setAuditorium(auditorium);
         eventAuditory.setDateTime(LocalDate.of(2019, 8, 20));
         eventAuditService.save(eventAuditory);
@@ -116,12 +118,15 @@ public class Runner {
         int eventDay = in.nextInt();
         LocalDate eventDate = LocalDate.of(eventEyear, eventMonth, eventDay);
 
+        Event event1 = eventService.getByName(eventName);
+        System.out.println(event1.getName() + " " + event1.getRating());
         EventAuditory eventAuditory1 = eventAuditService.getEventAuditoryByEventNameDate(eventName, eventDate);
         System.out.println("Your choice");
         System.out.println(eventAuditory1.getEvent().getName());
         System.out.println(eventAuditory1.getDateTime());
         System.out.println(eventAuditory1.getAuditorium().getName());
         System.out.println("Base price " + eventAuditory1.getEvent().getBasePriseOfTicket());
+        Event event2 = eventService.getByName(eventName);
 
         System.out.println("Input number of seat");
         int seat = in.nextInt();
@@ -138,6 +143,7 @@ public class Runner {
         ticket.setSeat(seat);
         ticket.setPrice(price);
         ticketService.save(ticket);
+        bookingService.bookTicket(ticket);
 
         System.out.println("YOUR TICKET");
         List<Ticket> tickets = ticketService.getTicketsByUser(user);

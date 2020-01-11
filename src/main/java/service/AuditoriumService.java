@@ -16,8 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuditoriumService {
-    @Autowired
-    AuditoriumRepositoryImpl auditoriumRepository;
+
+    private  AuditoriumRepositoryImpl auditoriumRepository;
 
 
     public Auditorium getByName(String name) {

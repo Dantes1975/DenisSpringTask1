@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class TicketService {
 
-    @Autowired
+
     private TicketRepositoryImpl ticketRepository;
 
     public Ticket save(Ticket ticket) {

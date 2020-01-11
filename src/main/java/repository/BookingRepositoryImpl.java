@@ -4,7 +4,6 @@ import bean.Booking;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import repository.dao.AbstractRepository;
 import repository.dao.BookingRepository;
 import repository.dao.CrudRepository;
 
