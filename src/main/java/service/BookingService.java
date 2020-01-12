@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 import repository.BookingRepositoryImpl;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Service
+@Transactional
 public class BookingService {
 
     private BookingRepositoryImpl bookingRepository;

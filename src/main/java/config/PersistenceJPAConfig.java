@@ -12,12 +12,13 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "repository")
-@EnableTransactionManagement
+//@EnableTransactionManagement
 public class PersistenceJPAConfig {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -43,17 +44,17 @@ public class PersistenceJPAConfig {
         return dataSource;
     }
 
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-        final JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-        return transactionManager;
-    }
-
-    @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
-        return new PersistenceExceptionTranslationPostProcessor();
-    }
+//    @Bean
+////    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+////        JpaTransactionManager transactionManager = new
+////                JpaTransactionManager();
+////        transactionManager.setEntityManagerFactory(emf);
+////        return transactionManager;
+////    }
+////    @Bean
+////    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+////        return new PersistenceExceptionTranslationPostProcessor();
+////    }
 
     Properties additionalProperties() {
         Properties properties = new Properties();

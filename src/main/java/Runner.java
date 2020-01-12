@@ -1,11 +1,7 @@
 import bean.*;
-import config.AspectConfig;
-import config.AuditoriumConfig;
 import config.EventConfig;
-import config.UserConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import service.*;
 
 import java.time.LocalDate;

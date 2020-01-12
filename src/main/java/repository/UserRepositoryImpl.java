@@ -34,7 +34,7 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
 
 
     public User getUserByEmail(String email) {
-        List<User> users = em.createQuery(String.format("select t from user t", User.class)).getResultList();
+        List<User> users = em.createQuery("SELECT U FROM User U").getResultList();
         em.close();
         User user = null;
         for (User us : users) {

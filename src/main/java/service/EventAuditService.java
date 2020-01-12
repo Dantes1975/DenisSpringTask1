@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import repository.EventAuditRepositoryImpl;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Transactional
 public class EventAuditService {
 
     private EventAuditRepositoryImpl eventAuditRepository;
