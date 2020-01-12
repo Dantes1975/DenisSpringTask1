@@ -25,7 +25,7 @@ public class Runner {
         BookingService bookingService = APPLICATION_CONTEXT.getBean("bookingService", BookingService.class);
         TicketService ticketService = APPLICATION_CONTEXT.getBean("ticketService", TicketService.class);
         DiscountService discountService = APPLICATION_CONTEXT.getBean("discountService", DiscountService.class);
-        //LocalContainerEntityManagerFactoryBean emf = APPLICATION_CONTEXT.getBean("entityManagerFactory", LocalContainerEntityManagerFactoryBean.class);
+
 
         Scanner in = new Scanner(System.in);
         System.out.println("Enter your name");

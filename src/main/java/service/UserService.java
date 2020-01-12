@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import repository.UserRepositoryImpl;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 @NoArgsConstructor
+@Transactional
 public class UserService {
 
     private UserRepositoryImpl userRepository;
