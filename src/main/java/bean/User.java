@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class User {
+@Table(name = "USERS")
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,7 +24,8 @@ public class User {
     private String surname;
     private LocalDate birthday;
     private String email;
-    @OneToMany
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Ticket> tickets = new ArrayList<>();
 
     public User(String name, String surname, LocalDate birthday, String email) {

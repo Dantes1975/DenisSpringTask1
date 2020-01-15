@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Transactional
+
 public class TicketService {
 
 

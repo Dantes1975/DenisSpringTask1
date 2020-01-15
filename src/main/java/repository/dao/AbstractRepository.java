@@ -1,49 +1,86 @@
 package repository.dao;
 
-import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
-import java.util.Map;
 
+
+//@RequiredArgsConstructor
 public abstract class AbstractRepository<T> implements CrudRepository<T> {
-    private final Class<T> clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    @PersistenceContext
-    private EntityManager em;
 
-    @Transactional
+    @PersistenceUnit
+    private final EntityManagerFactory ENTITY_MANAGER_FACTORY;
+
+    public AbstractRepository(EntityManagerFactory entityManagerFactory) {
+        ENTITY_MANAGER_FACTORY = entityManagerFactory;
+    }
+
+
+    private final Class<T> clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+
+    protected EntityManager getEntityManager() {
+        return ENTITY_MANAGER_FACTORY.createEntityManager();
+    }
+
+    @Override
     public T save(T t) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
         em.persist(t);
+        em.getTransaction().commit();
+        em.close();
         return t;
     }
 
-    @Transactional
-    public void remove(long id) {
-        T t = em.find(clazz, id);
-        em.remove(t);
-
-    }
-
-    @Transactional
+    @Override
     public T getById(long id) {
-        return em.find(clazz, id);
+        EntityManager em = getEntityManager();
+        T t = em.find(clazz, id);
+        em.close();
+        return t;
     }
 
-    @Transactional
-    public T getByName(String name) {
-        return null;
+    @Override
+    public void remove(long id) {
+        EntityManager em = getEntityManager();
+        T t = em.find(clazz, id);
+
+        em.getTransaction().begin();
+        em.remove(t);
+        em.getTransaction().commit();
+
+        em.close();
     }
 
-    @Transactional
+
+    @Override
     public List<T> getAll() {
+        EntityManager em = getEntityManager();
         List<T> list = em.createQuery(String.format("select t from %s t", clazz.getName()), clazz)
                 .getResultList();
+        em.close();
         return list;
     }
 
-    public abstract Map<Long, T> getStorage();
+    protected T getSingleResultByQuery(String query) {
+        EntityManager em = getEntityManager();
+        T t = em.createQuery(query, clazz)
+                .setHint("org.hibernate.cacheable", true)
+                .getSingleResult();
+        em.close();
+        return t;
+    }
 
+    protected List<T> getResultListByQuery(String query) {
+        EntityManager em = getEntityManager();
+        List<T> t = em.createQuery(query, clazz)
+                .getResultList();
+        em.close();
+        return t;
+    }
 
 }

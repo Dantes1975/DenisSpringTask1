@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Service
-@Transactional
 public class BookingService {
 
     private BookingRepositoryImpl bookingRepository;
@@ -82,8 +81,9 @@ public class BookingService {
         }
     }
 
-    public void bookTicket(Ticket ticket) {
-        List<Ticket> tickets = ticket.getUser().getTickets();
+    public User bookTicket(Ticket ticket, User user) {
+        List<Ticket> tickets = user.getTickets();
         tickets.add(ticket);
+        return user;
     }
 }

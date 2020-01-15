@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
@@ -12,15 +13,15 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class EventAuditory {
+public class EventAuditory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne
-    @PrimaryKeyJoinColumn
+
+    @ManyToOne
     private Event event;
-    @OneToOne
-    @PrimaryKeyJoinColumn
+
+    @ManyToOne(cascade = CascadeType.ALL)
     private Auditorium auditorium;
     private LocalDate dateTime;
 }

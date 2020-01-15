@@ -7,17 +7,15 @@ import org.h2.util.IntArray;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @TypeDef(name = "int-array", typeClass = org.hibernate.mapping.Array.class)
-public class Auditorium {
+public class Auditorium implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -32,6 +30,5 @@ public class Auditorium {
         this.numberOfSeats = numberOfSeats;
         this.vipSeats = vipSeats;
     }
-
 
 }

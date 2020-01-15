@@ -4,19 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Event {
+@Table(name = "EVENTS")
+public class Event implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "EVENTS_ID_SEQ_GEN", sequenceName = "EVENTS_ID_SEQ_GEN", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EVENTS_ID_SEQ_GEN")
     private long id;
     private String name;
     private double basePriseOfTicket;

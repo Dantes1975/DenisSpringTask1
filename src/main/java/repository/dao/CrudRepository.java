@@ -10,5 +10,5 @@ public interface CrudRepository<T> {
     void remove(long id);
     T getById(long id);
     List<T> getAll();
-    Map<Long, T> getStorage();
+
 }

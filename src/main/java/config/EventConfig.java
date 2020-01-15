@@ -1,33 +1,63 @@
 package config;
 
+import bean.Auditorium;
 import bean.Booking;
-import bean.Event;
 import bean.EventAuditory;
 import bean.Ticket;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import repository.BookingRepositoryImpl;
-import repository.EventAuditRepositoryImpl;
-import repository.EventRepositoryImpl;
-import repository.TicketRepositoryImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
+import repository.*;
 import service.*;
 import strategy.BirthdayStrategy;
 import strategy.DiscountStrategy;
 import strategy.EveryTenthTicket;
 
+
+import javax.persistence.EntityManagerFactory;
+
+
+import static util.StringToArrayUtils.getVipSeats;
+
 @Configuration
-@Import({UserConfig.class, AuditoriumConfig.class, AspectConfig.class, PersistenceJPAConfig.class})
+@Import({AspectConfig.class, PersistenceJPAConfig.class})
+@ComponentScan("java.*")
+@PropertySource("classpath:auditorium.properties")
 public class EventConfig {
 
+    @Autowired
+    Environment env;
+
+
     @Bean
-    public BookingService bookingService() {
-        return new BookingService(bookingRepository(), eventAuditService(), discountService());
+    UserService userService(EntityManagerFactory entityManagerFactory) {
+        return new UserService(userRepository(entityManagerFactory));
     }
 
     @Bean
-    public BookingRepositoryImpl bookingRepository() {
-        return new BookingRepositoryImpl();
+    public UserRepositoryImpl userRepository(EntityManagerFactory entityManagerFactory) {
+        return new UserRepositoryImpl(entityManagerFactory);
+    }
+
+    @Bean
+    AuditoriumService auditoriumService(EntityManagerFactory entityManagerFactory) {
+        return new AuditoriumService(auditoriumRepository(entityManagerFactory));
+    }
+
+
+    @Bean
+    AuditoriumRepositoryImpl auditoriumRepository(EntityManagerFactory entityManagerFactory) {
+        return new AuditoriumRepositoryImpl(entityManagerFactory);
+    }
+
+    @Bean
+    public BookingService bookingService(EntityManagerFactory entityManagerFactory) {
+        return new BookingService(bookingRepository(entityManagerFactory), eventAuditService(entityManagerFactory), discountService());
+    }
+
+    @Bean
+    public BookingRepositoryImpl bookingRepository(EntityManagerFactory entityManagerFactory) {
+        return new BookingRepositoryImpl(entityManagerFactory);
     }
 
     @Bean
@@ -36,75 +66,76 @@ public class EventConfig {
     }
 
     @Bean
-    public EventService eventService() {
-        return new EventService(eventRepository());
+    public EventService eventService(EntityManagerFactory entityManagerFactory) {
+        return new EventService(eventRepository(entityManagerFactory));
     }
 
     @Bean
-    public EventRepositoryImpl eventRepository() {
-        return new EventRepositoryImpl();
-    }
-
-
-    @Bean
-    public Event event1() {
-        return new Event("Predator", 100, "high");
-    }
-
-    @Bean
-    public Event event2() {
-        return new Event("Terminator", 80, "mid");
-    }
-
-    @Bean
-    public Event event3() {
-        return new Event("Konan", 50, "low");
+    public EventRepositoryImpl eventRepository(EntityManagerFactory entityManagerFactory) {
+        return new EventRepositoryImpl(entityManagerFactory);
     }
 
 
     @Bean
-    public EventAuditService eventAuditService() {
-        return new EventAuditService(eventAuditRepository());
+    public EventAuditService eventAuditService(EntityManagerFactory entityManagerFactory) {
+        return new EventAuditService(eventAuditRepository(entityManagerFactory));
     }
 
     @Bean
-    public EventAuditRepositoryImpl eventAuditRepository() {
-        return new EventAuditRepositoryImpl();
+    public EventAuditRepositoryImpl eventAuditRepository(EntityManagerFactory entityManagerFactory) {
+        return new EventAuditRepositoryImpl(entityManagerFactory);
+    }
+
+
+    @Bean
+    public TicketService ticketService(EntityManagerFactory entityManagerFactory) {
+        return new TicketService(ticketRepository(entityManagerFactory));
     }
 
     @Bean
-    public EventAuditory eventAuditory() {
-        return new EventAuditory();
+    public TicketRepositoryImpl ticketRepository(EntityManagerFactory entityManagerFactory) {
+        return new TicketRepositoryImpl(entityManagerFactory);
     }
 
     @Bean
-    public TicketService ticketService(){
-        return new TicketService(ticketRepository());
-    }
-
-    @Bean
-    public TicketRepositoryImpl ticketRepository(){
-        return new TicketRepositoryImpl();
-    }
-
-    @Bean
-    public Ticket ticket(){
+    public Ticket ticket() {
         return new Ticket();
     }
 
     @Bean
-    public DiscountService discountService(){
+    public DiscountService discountService() {
         return new DiscountService();
     }
 
     @Bean
-    public DiscountStrategy discountStrategy1(){
+    public DiscountStrategy discountStrategy1() {
         return new BirthdayStrategy();
     }
 
     @Bean
-    public DiscountStrategy discountStrategy2(){
+    public DiscountStrategy discountStrategy2() {
         return new EveryTenthTicket();
     }
 
+    @Bean
+    public Auditorium auditoriumKosmos() {
+        return new Auditorium(env.getProperty("auditorium1.name"),
+                Integer.valueOf(env.getProperty("auditorium1.numberOfSeats")),
+                getVipSeats(env.getProperty("auditorium1.vipSeats")));
+    }
+
+    @Bean
+    public Auditorium auditoriumMir() {
+        return new Auditorium(env.getProperty("auditorium2.name"),
+                Integer.valueOf(env.getProperty("auditorium2.numberOfSeats")),
+                getVipSeats(env.getProperty("auditorium2.vipSeats")));
+    }
+
+    @Bean
+    public Auditorium auditoriumOktyabr() {
+        return new Auditorium(env.getProperty("auditorium3.name"),
+                Integer.valueOf(env.getProperty("auditorium3.numberOfSeats")),
+                getVipSeats(env.getProperty("auditorium3.vipSeats")));
+
+    }
 }

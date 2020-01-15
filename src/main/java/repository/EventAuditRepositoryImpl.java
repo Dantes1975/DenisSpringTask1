@@ -1,21 +1,18 @@
 package repository;
 
 import bean.EventAuditory;
+import org.springframework.stereotype.Repository;
 import repository.dao.AbstractRepository;
-import repository.dao.EventAuditRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.NamedEntityGraph;
 
-public class EventAuditRepositoryImpl extends AbstractRepository<EventAuditory> implements EventAuditRepository {
-    private static Map<Long, EventAuditory> EVENTAUDITORIUMS = new HashMap<Long, EventAuditory>();
-    private static AtomicLong ID = new AtomicLong(1);
+@Repository
+@NamedEntityGraph
+public class EventAuditRepositoryImpl extends AbstractRepository<EventAuditory>{
 
-
-    @Override
-    public Map<Long, EventAuditory> getStorage() {
-        return EVENTAUDITORIUMS;
+    public EventAuditRepositoryImpl(EntityManagerFactory ENTITY_MANAGER_FACTORY) {
+        super(ENTITY_MANAGER_FACTORY);
     }
 
 
