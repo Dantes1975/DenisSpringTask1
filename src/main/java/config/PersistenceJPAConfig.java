@@ -25,6 +25,7 @@ import java.util.Properties;
 @Configuration
 @ComponentScan("java.*")
 @PropertySource("classpath:database.properties")
+
 public class PersistenceJPAConfig {
 
     @PostConstruct

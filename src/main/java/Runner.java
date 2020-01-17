@@ -1,7 +1,10 @@
+import aspects.CounterAspect;
 import bean.*;
 import config.EventConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import repository.aspects.CounterAspectDao;
+import repository.aspects.DiscountAspectDao;
 import service.*;
 
 import java.time.LocalDate;
@@ -17,11 +20,11 @@ public class Runner {
         AuditoriumService auditoriumService = APPLICATION_CONTEXT.getBean("auditoriumService", AuditoriumService.class);
         EventService eventService = APPLICATION_CONTEXT.getBean("eventService", EventService.class);
         EventAuditService eventAuditService = APPLICATION_CONTEXT.getBean("eventAuditService", EventAuditService.class);
-        //EventAuditory eventAuditory = APPLICATION_CONTEXT.getBean("eventAuditory", EventAuditory.class);
+        CounterAspectDao counterAspectDao = APPLICATION_CONTEXT.getBean(CounterAspectDao.class);
         BookingService bookingService = APPLICATION_CONTEXT.getBean("bookingService", BookingService.class);
         TicketService ticketService = APPLICATION_CONTEXT.getBean("ticketService", TicketService.class);
         DiscountService discountService = APPLICATION_CONTEXT.getBean("discountService", DiscountService.class);
-
+        DiscountAspectDao discountAspectDao = APPLICATION_CONTEXT.getBean(DiscountAspectDao.class);
 
         Scanner in = new Scanner(System.in);
 
@@ -68,17 +71,30 @@ public class Runner {
                 break;
         }
 
+        DiscountCounter discountCounter = new DiscountCounter();
+        discountCounter.setUser(user);
+        discountAspectDao.save(discountCounter);
+
         System.out.println("Events");
         List<Event> events = eventService.getAll();
         for (Event event : events) {
             System.out.println(event.getName());
         }
 
-
-
         Event predator = eventService.getById(1);
         Event terminator = eventService.getById(2);
         Event konan = eventService.getById(3);
+
+        EventCounter counterPredator = new EventCounter();
+        counterPredator.setEvent(predator);
+        counterAspectDao.save(counterPredator);
+        EventCounter counterTerminator = new EventCounter();
+        counterTerminator.setEvent(terminator);
+        counterAspectDao.save(counterTerminator);
+        EventCounter counterKonan = new EventCounter();
+        counterKonan.setEvent(konan);
+        counterAspectDao.save(counterKonan);
+
         Auditorium kosmos = APPLICATION_CONTEXT.getBean("auditoriumKosmos", Auditorium.class);
         Auditorium mir = APPLICATION_CONTEXT.getBean("auditoriumMir", Auditorium.class);
         Auditorium oktyabr = APPLICATION_CONTEXT.getBean("auditoriumOktyabr", Auditorium.class);
@@ -90,13 +106,12 @@ public class Runner {
         eventAuditService.save(kosmosPredator);
 
         EventAuditory mirTerminator = new EventAuditory();
-        EventAuditory oktyabrKonan = new EventAuditory();
-
         mirTerminator.setEvent(terminator);
         mirTerminator.setAuditorium(mir);
         mirTerminator.setDateTime(LocalDate.of(2019, 8, 20));
         eventAuditService.save(mirTerminator);
 
+        EventAuditory oktyabrKonan = new EventAuditory();
         oktyabrKonan.setEvent(konan);
         oktyabrKonan.setAuditorium(oktyabr);
         oktyabrKonan.setDateTime(LocalDate.of(2019, 8, 20));
@@ -144,8 +159,7 @@ public class Runner {
         for (Event event1 : eventAuditories1) {
             System.out.println(event1.getName() + " Base price " + event1.getBasePriseOfTicket());
         }
-        in.nextLine();
-
+          in.nextLine();
 
 
         System.out.println("Input name of event");
@@ -167,7 +181,7 @@ public class Runner {
         System.out.println(eventAuditory1.getDateTime());
         System.out.println(eventAuditory1.getAuditorium().getName());
         System.out.println("Base price " + eventAuditory1.getEvent().getBasePriseOfTicket());
-        Event event2 = eventService.getByName(eventName);
+
 
         System.out.println("Input number of seat");
         int seat = in.nextInt();
@@ -197,6 +211,45 @@ public class Runner {
             System.out.println("Total price: " + tic.getPrice());
         }
 
+        System.out.println("CounterGetByName");
 
+        System.out.println("CounterGetByName for Predator work "
+                + counterAspectDao.getCounterGetByNameVal(predator) + " times");
+
+        System.out.println("CounterGetByName for Konan work "
+                + counterAspectDao.getCounterGetByNameVal(konan) + " times");
+
+        System.out.println("CounterGetByName for Terminator work "
+                + counterAspectDao.getCounterGetByNameVal(terminator) + " times");
+
+
+        System.out.println("CounterBookTicket");
+        System.out.println("CounterBookTicket for Predator work "
+                + counterAspectDao.getCounterBookTicket(predator) + " times");
+
+        System.out.println("CounterBookTicket for Konan work "
+                + counterAspectDao.getCounterBookTicket(konan) + " times");
+
+        System.out.println("CounterBookTicket for Terminator work "
+                + counterAspectDao.getCounterBookTicket(terminator) + " times");
+
+
+        System.out.println("CounterPriceRequest");
+        System.out.println("CounterPriceRequest for Predator work "
+                + counterAspectDao.getCounterPriceRequest(predator) + " times");
+
+        System.out.println("CounterPriceRequest for Konan work "
+                + counterAspectDao.getCounterPriceRequest(konan) + " times");
+
+        System.out.println("CounterPriceRequest for Terminator work "
+                + counterAspectDao.getCounterPriceRequest(terminator) + " times");
+
+        System.out.println("DiscountStrategy");
+        System.out.println("BirthDayDiscountStrategy work "
+                + discountAspectDao.getDiscountBirthday(user) + " times");
+        System.out.println("TenthTicketDiscountStrategy work "
+                + discountAspectDao.getDiscountTenthTicket(user) + " times");
+
+        System.out.println("Good by");
     }
 }

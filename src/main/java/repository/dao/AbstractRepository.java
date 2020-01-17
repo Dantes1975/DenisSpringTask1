@@ -66,6 +66,16 @@ public abstract class AbstractRepository<T> implements CrudRepository<T> {
         return list;
     }
 
+    @Override
+    public T update(T t) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        t = em.merge(t);
+        em.getTransaction().commit();
+        em.close();
+        return t;
+    }
+
     protected T getSingleResultByQuery(String query) {
         EntityManager em = getEntityManager();
         T t = em.createQuery(query, clazz)

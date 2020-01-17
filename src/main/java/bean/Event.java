@@ -27,4 +27,6 @@ public class Event implements Serializable {
         this.basePriseOfTicket = basePriseOfTicket;
         this.rating = rating;
     }
+
+
 }

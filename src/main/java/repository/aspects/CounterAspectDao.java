@@ -1,35 +1,103 @@
 package repository.aspects;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import bean.Event;
+import bean.EventCounter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import repository.dao.AbstractRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Component
-public class CounterAspectDao {
+public class CounterAspectDao extends AbstractRepository<EventCounter> {
 
-    private int counter = 0;
-
-    @Autowired
-    private List<Integer> counters = new ArrayList<>();
-
-    public int putCounter(int counter) {
-        counters.add(counter);
-        return counter;
+    public CounterAspectDao(EntityManagerFactory ENTITY_MANAGER_FACTORY) {
+        super(ENTITY_MANAGER_FACTORY);
     }
 
-    public int getCounter() {
-        return counters.get(0);
+    private final String SET_COUNTER_BY_NAME = "select e from EventCounter e where e.event.id=:eventId";
+    private final String GET_COUNTER_BY_NAME = "select e.countGetByName from EventCounter e where e.event.id=:eventId";
+    private final String SET_COUNTER_BOOK_TICKET = "select e from EventCounter e where e.event.id=:eventId";
+    private final String GET_COUNTER_BOOK_TICKET = "select e.countBooked from EventCounter e where e.event.id=:eventId";
+    private final String SET_COUNTER_PRICE_REQUEST = "select e from EventCounter e where e.event.id=:eventId";
+    private final String GET_COUNTER_PRICE_REQUEST = "select e.countPriceRequested from EventCounter e where e.event.id=:eventId";
+
+
+    public void setCounterGetByNameVal(Event event) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery(SET_COUNTER_BY_NAME);
+        query.setParameter("eventId", event.getId());
+        EventCounter eventCounter = (EventCounter) query.getSingleResult();
+        int counter = eventCounter.getCountGetByName() + 1;
+        eventCounter.setCountGetByName(counter);
+        em.merge(eventCounter);
+        em.getTransaction().commit();
+        em.close();
     }
 
-    public void deleteCounter() {
-        counters.remove(0);
+    public int getCounterGetByNameVal(Event event) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery(GET_COUNTER_BY_NAME);
+        query.setParameter("eventId", event.getId());
+        int result = (int) query.getSingleResult();
+        em.getTransaction().commit();
+        em.close();
+        return result;
+    }
+
+    public void setCounterBookTicket(Event event) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery(SET_COUNTER_BOOK_TICKET);
+        query.setParameter("eventId", event.getId());
+        EventCounter eventCounter = (EventCounter) query.getSingleResult();
+        int counter = eventCounter.getCountBooked() + 1;
+        eventCounter.setCountBooked(counter);
+        em.merge(eventCounter);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public int getCounterBookTicket(Event event) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery(GET_COUNTER_BOOK_TICKET);
+        query.setParameter("eventId", event.getId());
+        int result = (int) query.getSingleResult();
+        em.getTransaction().commit();
+        em.close();
+        return result;
+    }
+
+    public void setCounterPriceRequest(Event event) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery(SET_COUNTER_PRICE_REQUEST);
+        query.setParameter("eventId", event.getId());
+        EventCounter eventCounter = (EventCounter) query.getSingleResult();
+        int counter = eventCounter.getCountPriceRequested() + 1;
+        eventCounter.setCountPriceRequested(counter);
+        em.merge(eventCounter);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public int getCounterPriceRequest(Event event) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery(GET_COUNTER_PRICE_REQUEST);
+        query.setParameter("eventId", event.getId());
+        int result = (int) query.getSingleResult();
+        em.getTransaction().commit();
+        em.close();
+        return result;
     }
 }
