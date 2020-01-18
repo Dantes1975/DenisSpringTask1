@@ -3,7 +3,6 @@ package bean;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.h2.util.IntArray;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 

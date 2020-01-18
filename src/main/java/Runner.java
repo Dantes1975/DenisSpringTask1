@@ -1,10 +1,9 @@
-import aspects.CounterAspect;
 import bean.*;
-import config.EventConfig;
+import config.RootConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import repository.aspects.CounterAspectDao;
-import repository.aspects.DiscountAspectDao;
+import repository.CounterAspestDao;
+import repository.DiscountAspectDao;
 import service.*;
 
 import java.time.LocalDate;
@@ -12,17 +11,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Runner {
-    private static final ApplicationContext APPLICATION_CONTEXT = new AnnotationConfigApplicationContext(EventConfig.class);
+    private static final ApplicationContext APPLICATION_CONTEXT = new AnnotationConfigApplicationContext(RootConfig.class);
 
     public static void main(String[] args) {
 
         UserService userService = APPLICATION_CONTEXT.getBean(UserService.class);
-        AuditoriumService auditoriumService = APPLICATION_CONTEXT.getBean("auditoriumService", AuditoriumService.class);
-        EventService eventService = APPLICATION_CONTEXT.getBean("eventService", EventService.class);
-        EventAuditService eventAuditService = APPLICATION_CONTEXT.getBean("eventAuditService", EventAuditService.class);
-        CounterAspectDao counterAspectDao = APPLICATION_CONTEXT.getBean(CounterAspectDao.class);
-        BookingService bookingService = APPLICATION_CONTEXT.getBean("bookingService", BookingService.class);
-        TicketService ticketService = APPLICATION_CONTEXT.getBean("ticketService", TicketService.class);
+        AuditoriumService auditoriumService = APPLICATION_CONTEXT.getBean(AuditoriumService.class);
+        EventService eventService = APPLICATION_CONTEXT.getBean(EventService.class);
+        EventAuditService eventAuditService = APPLICATION_CONTEXT.getBean(EventAuditService.class);
+        CounterAspestDao counterAspectDao = APPLICATION_CONTEXT.getBean(CounterAspestDao.class);
+        BookingService bookingService = APPLICATION_CONTEXT.getBean(BookingService.class);
+        TicketService ticketService = APPLICATION_CONTEXT.getBean(TicketService.class);
         DiscountService discountService = APPLICATION_CONTEXT.getBean("discountService", DiscountService.class);
         DiscountAspectDao discountAspectDao = APPLICATION_CONTEXT.getBean(DiscountAspectDao.class);
 
@@ -159,7 +158,7 @@ public class Runner {
         for (Event event1 : eventAuditories1) {
             System.out.println(event1.getName() + " Base price " + event1.getBasePriseOfTicket());
         }
-          in.nextLine();
+        in.nextLine();
 
 
         System.out.println("Input name of event");

@@ -6,7 +6,8 @@ import bean.EventAuditory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import repository.EventAuditRepositoryImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import repository.EventAuditRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,7 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 public class EventAuditService {
 
-    private EventAuditRepositoryImpl eventAuditRepository;
+    @Autowired
+    EventAuditRepository eventAuditRepository;
 
     public EventAuditory save(EventAuditory eventAuditory) {
         eventAuditRepository.save(eventAuditory);
@@ -25,20 +27,20 @@ public class EventAuditService {
     }
 
     public void remove(long id) {
-        eventAuditRepository.remove(id);
+        eventAuditRepository.deleteById(id);
     }
 
     public EventAuditory getById(long id) {
-        return eventAuditRepository.getById(id);
+        return eventAuditRepository.findById(id).orElse(null);
     }
 
 
     public List<EventAuditory> getAll() {
-        return eventAuditRepository.getAll();
+        return (List<EventAuditory>) eventAuditRepository.findAll();
     }
 
     public List<Event> getEventForDateRange(LocalDate from, LocalDate to) {
-        List<EventAuditory> list = eventAuditRepository.getAll();
+        List<EventAuditory> list = (List<EventAuditory>) eventAuditRepository.findAll();
         List<Event> events = new ArrayList<>();
         for (EventAuditory event : list) {
             if (event.getDateTime().isAfter(from) && event.getDateTime().isBefore(to)) {
@@ -49,7 +51,7 @@ public class EventAuditService {
     }
 
     public List<Event> getNextEvents(LocalDate to) {
-        List<EventAuditory> list = eventAuditRepository.getAll();
+        List<EventAuditory> list = (List<EventAuditory>) eventAuditRepository.findAll();
         List<Event> events = new ArrayList<>();
         for (EventAuditory event : list) {
             if (event.getDateTime().isBefore(to)) {
@@ -60,7 +62,7 @@ public class EventAuditService {
     }
 
     public List<EventAuditory> getForDateRange(LocalDate from, LocalDate to) {
-        List<EventAuditory> list = eventAuditRepository.getAll();
+        List<EventAuditory> list = (List<EventAuditory>) eventAuditRepository.findAll();
         for (EventAuditory event : list) {
             if (event.getDateTime().isAfter(from) && event.getDateTime().isBefore(to)) {
                 continue;
@@ -70,7 +72,7 @@ public class EventAuditService {
     }
 
     public Auditorium getAuditoryByEventDate(Event event, LocalDate date) {
-        List<EventAuditory> list = eventAuditRepository.getAll();
+        List<EventAuditory> list = (List<EventAuditory>) eventAuditRepository.findAll();
         Auditorium auditorium = null;
         for (EventAuditory eventAudit : list) {
             if (eventAudit.getEvent().equals(event) && eventAudit.getDateTime().equals(date)) {
@@ -83,7 +85,7 @@ public class EventAuditService {
     }
 
     public EventAuditory getEventAuditoryByEventNameDate(String name, LocalDate date) {
-        List<EventAuditory> list = eventAuditRepository.getAll();
+        List<EventAuditory> list = (List<EventAuditory>) eventAuditRepository.findAll();
         EventAuditory eventAuditory = null;
         for (EventAuditory eventAud : list) {
             if (eventAud.getEvent().getName().equals(name) && eventAud.getDateTime().equals(date)) {

@@ -6,8 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import repository.EventRepositoryImpl;
+import repository.EventRepository;
 
 import java.util.List;
 
@@ -16,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Service
 public class EventService {
-
-   private EventRepositoryImpl eventRepository;
+    @Autowired
+    private EventRepository eventRepository;
 
     public Event save(Event event) {
         eventRepository.save(event);
@@ -26,12 +25,12 @@ public class EventService {
 
 
     public void remove(long id) {
-        eventRepository.remove(id);
+        eventRepository.deleteById(id);
     }
 
 
     public Event getById(long id) {
-        return eventRepository.getById(id);
+        return eventRepository.findById(id).orElse(null);
     }
 
 
@@ -41,7 +40,7 @@ public class EventService {
 
 
     public List<Event> getAll() {
-        return eventRepository.getAll();
+        return (List<Event>) eventRepository.findAll();
     }
 
 

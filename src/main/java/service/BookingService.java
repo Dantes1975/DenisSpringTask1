@@ -5,10 +5,10 @@ import bean.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import repository.BookingRepositoryImpl;
+import repository.BookingRepository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 
@@ -18,9 +18,16 @@ import java.util.List;
 @Service
 public class BookingService {
 
-    private BookingRepositoryImpl bookingRepository;
+    @Autowired
+    BookingRepository bookingRepository;
+
     private EventAuditService eventAuditService;
     private DiscountService discountService;
+
+    public BookingService(EventAuditService eventAuditService, DiscountService discountService) {
+        this.eventAuditService = eventAuditService;
+        this.discountService = discountService;
+    }
 
     public Booking save(Booking booking) {
         bookingRepository.save(booking);
@@ -29,15 +36,15 @@ public class BookingService {
 
 
     public void remove(long id) {
-        bookingRepository.remove(id);
+        bookingRepository.deleteById(id);
     }
 
     public Booking getById(long id) {
-        return bookingRepository.getById(id);
+        return bookingRepository.findById(id).orElse(null);
     }
 
     public List<Booking> getAll() {
-        return bookingRepository.getAll();
+        return (List<Booking>) bookingRepository.findAll();
     }
 
 
