@@ -21,7 +21,7 @@ import static util.StringToArrayUtils.getVipSeats;
 
 @Configuration
 @Import({AspectConfig.class, PersistenceJPAConfig.class})
-@ComponentScan("java.*")
+@ComponentScan("java")
 @PropertySource("classpath:auditorium.properties")
 public class EventConfig {
 

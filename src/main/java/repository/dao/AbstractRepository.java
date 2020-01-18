@@ -10,6 +10,7 @@ import java.util.List;
 
 
 //@RequiredArgsConstructor
+
 public abstract class AbstractRepository<T> implements CrudRepository<T> {
 
     @PersistenceUnit
