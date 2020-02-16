@@ -1,14 +1,44 @@
 package service;
 
 import bean.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Service;
+import repository.UserRepositoryImpl;
 
 import java.util.List;
 
-public interface UserService {
-    User save(User user);
-    void remove(long id);
-    User getById(long id);
-    User getUserByEmail(String email);
-    List <User> getAll();
+@Data
+@Service
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserService {
 
+    private UserRepositoryImpl userRepository;
+
+
+    public User save(User user) {
+        userRepository.save(user);
+        return user;
+    }
+
+
+    public void remove(long id) {
+        userRepository.remove(id);
+    }
+
+
+    public User getById(long id) {
+        return userRepository.getById(id);
+    }
+
+    public User getByEmail(String email) {
+        return userRepository.getUserByEmail(email);
+    }
+
+
+    public List<User> getAll() {
+        return userRepository.getAll();
+    }
 }

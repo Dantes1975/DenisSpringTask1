@@ -1,7 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-        <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" xmlns:c="http://www.springframework.org/schema/c" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
-    <context:annotation-config />
-    <context:component-scan base-package="bean" />
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    <context:annotation-config/>
+    <context:component-scan base-package="bean"/>
 
+<!--    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">-->
+<!--        <property name="location" value="classpath:auditorium.properties"/>-->
+<!--    </bean>-->
 
+<!--    <bean id="auditoriumService" class="service.AuditoriumService"-->
+<!--          c:auditoriumRepository-ref="auditoriumRepository">-->
+
+<!--    </bean>-->
+<!--    <bean id="auditoriumRepository" class="repository.AuditoriumRepositoryImpl"-->
+<!--          c:auditoriums-ref="auditoriumList" autowire-candidate="true"/>-->
+
+<!--    <util:list id="auditoriumList" value-type="bean.Auditorium" list-class="java.util.ArrayList" scope="singleton">-->
+<!--        <bean class="bean.Auditorium"-->
+<!--              c:name="${auditorium1.name}"-->
+<!--              c:numberOfSeats="${auditorium1.numberOfSeats}"-->
+<!--              c:vipSeats="${auditorium1.vipSeats}"/>-->
+<!--        <bean class="bean.Auditorium"-->
+<!--              c:name="${auditorium2.name}"-->
+<!--              c:numberOfSeats="${auditorium2.numberOfSeats}"-->
+<!--              c:vipSeats="${auditorium2.vipSeats}"/>-->
+<!--        <bean class="bean.Auditorium"-->
+<!--              c:name="${auditorium3.name}"-->
+<!--              c:numberOfSeats="${auditorium3.numberOfSeats}"-->
+<!--              c:vipSeats="${auditorium3.vipSeats}"/>-->
+<!--    </util:list>-->
 </beans>

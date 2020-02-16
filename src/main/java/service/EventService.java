@@ -1,18 +1,46 @@
 package service;
 
 import bean.Event;
-import bean.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Service;
+import repository.EventRepositoryImpl;
 
 import java.util.List;
 
-public interface EventService {
-    Event save(Event event);
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Service
+public class EventService {
 
-    void remove(long id);
+    private EventRepositoryImpl eventRepository;
 
-    Event getById(long id);
+    public Event save(Event event) {
+        eventRepository.save(event);
+        return event;
+    }
 
-    Event getByName(String name);
 
-    List<Event> getAll();
+    public void remove(long id) {
+        eventRepository.remove(id);
+    }
+
+
+    public Event getById(long id) {
+        return eventRepository.getById(id);
+    }
+
+
+    public Event getByName(String name) {
+        return eventRepository.getByName(name);
+    }
+
+
+    public List<Event> getAll() {
+        return eventRepository.getAll();
+    }
+
+
 }
